@@ -20,36 +20,38 @@ class MovieViewModel : ViewModel() {
     }
 
     fun getMovies(context: Context) {
-        val obj = JSONObject(loadJSONFromAsset(context))
-        val movieArray = obj.getJSONArray("movies")
-        Log.d("Details-->", movieArray.toString())
-        val movieList = ArrayList<Movie>()
-        try {
-            for (i in 0 until movieArray.length()) {
-                val jsonObject = movieArray.getJSONObject(i)
-                val description = jsonObject.getString("description")
-                val name = jsonObject.getString("name")
-                val rating = jsonObject.getString("rating")
-                val url = jsonObject.getString("url")
-                val selection = jsonObject.getString("selection")
-                val director = jsonObject.getString("director")
-                val year = jsonObject.getString("year")
-                val length = jsonObject.getString("length")
-                val stars = jsonObject.getString("stars")
-                val image = jsonObject.getString("image")
+        if (currentViewState().movies.isEmpty()) {
+            val movieList = ArrayList<Movie>()
+            val obj = JSONObject(loadJSONFromAsset(context))
+            val movieArray = obj.getJSONArray("movies")
+            Log.d("Details-->", movieArray.toString())
+            try {
+                for (i in 0 until movieArray.length()) {
+                    val jsonObject = movieArray.getJSONObject(i)
+                    val description = jsonObject.getString("description")
+                    val name = jsonObject.getString("name")
+                    val rating = jsonObject.getString("rating")
+                    val url = jsonObject.getString("url")
+                    val selection = jsonObject.getString("selection")
+                    val director = jsonObject.getString("director")
+                    val year = jsonObject.getString("year")
+                    val length = jsonObject.getString("length")
+                    val stars = jsonObject.getString("stars")
+                    val image = jsonObject.getString("image")
 
-                movieList.add(
-                        Movie(
-                                description = description, name = name, rating = rating.toDouble(), url = url,
-                                selection = selection.toBoolean(), director = director, year = year,
-                                length = length, stars = stars, image = image
-                        )
-                )
+                    movieList.add(
+                            Movie(
+                                    description = description, name = name, rating = rating.toDouble(), url = url,
+                                    selection = selection.toBoolean(), director = director, year = year,
+                                    length = length, stars = stars, image = image
+                            )
+                    )
+                }
+            } catch (e: JSONException) {
+                e.printStackTrace()
             }
-        } catch (e: JSONException) {
-            e.printStackTrace()
+            viewState.value = currentViewState().copy(movies = movieList)
         }
-        viewState.value = currentViewState().copy(movies = movieList)
     }
 
     private fun loadJSONFromAsset(context: Context): String? {
