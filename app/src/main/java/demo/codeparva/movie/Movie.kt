@@ -10,5 +10,5 @@ data class Movie(
         val rating: Double,
         val director: String?,
         val url: String,
-        val selection: Boolean
+        var selection: Boolean
 )
