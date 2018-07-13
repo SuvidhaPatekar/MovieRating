@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnClickListener {
         setData(movieViewModel)
         movieViewModel.getMovies(this)
         movieAdapter = MovieAdapter()
-        movieAdapter.setOnClickListener(this)
+        movieAdapter.setOnClickListener(this, context = this)
 
         rvMovies.adapter = movieAdapter
         rvMovies.isNestedScrollingEnabled = false
