@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DefaultItemAnimator
+import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -14,7 +16,7 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnClickListener {
 
     lateinit var movieAdapter: MovieAdapter
     lateinit var movieViewModel: MovieViewModel
-    lateinit var movieList: ArrayList<Movie>
+    lateinit var movieList: List<Movie>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,10 +28,11 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnClickListener {
         setData(movieViewModel)
         movieViewModel.getMovies(this)
         movieAdapter = MovieAdapter()
-        movieAdapter.setOnClickListener(this, context = this)
+        movieAdapter.setOnClickListener(this)
 
         rvMovies.adapter = movieAdapter
-        rvMovies.isNestedScrollingEnabled = false
+//        rvMovies.isNestedScrollingEnabled = false
+        rvMovies.itemAnimator = DefaultItemAnimator()
 
         btnClearAll.setOnClickListener {
             movieViewModel.onClearAll()
@@ -69,16 +72,17 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnClickListener {
 
     private fun setData(movieViewModel: MovieViewModel) {
         movieViewModel.viewState.observe(this, Observer {
+            Log.i("Observe", it.toString())
             if (null != it && it.movies.isNotEmpty()) {
                 movieList = it.movies
-                movieAdapter.setMovies(movies = it.movies)
+                movieAdapter.submitList(it.movies)
                 rvMovies.visibility = View.VISIBLE
                 btnClearAll.visibility = View.VISIBLE
                 btnSelectAll.visibility = View.VISIBLE
                 btnDelete.visibility = View.VISIBLE
                 tvRefresh.visibility = View.GONE
             } else {
-                movieAdapter.setMovies(movies = null)
+                movieAdapter.submitList(emptyList())
                 rvMovies.visibility = View.GONE
                 btnClearAll.visibility = View.GONE
                 btnSelectAll.visibility = View.GONE
@@ -105,15 +109,13 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnClickListener {
         movieViewModel.onLongClick(position)
     }
 
-
     override fun onSelect(position: Int) {
+        Log.i("Show snackbar", "Activity ")
         Snackbar.make(
-                btnDelete,
+                findViewById(android.R.id.content),
                 movieList[position].name,
                 Snackbar.LENGTH_SHORT
-        )
-                .show()
+        ).show()
         movieViewModel.onSelect(position)
-
     }
 }

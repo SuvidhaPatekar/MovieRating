@@ -7,11 +7,13 @@ import android.util.Log
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MovieViewModel : ViewModel() {
 
     data class ViewState(
-            val movies: ArrayList<Movie>,
+            val movies: List<Movie>,
             val showDialog: Boolean = false,
             val showMessage: Boolean = false
     )
@@ -61,11 +63,11 @@ class MovieViewModel : ViewModel() {
     private fun loadJSONFromAsset(context: Context): String? {
         var json: String? = null
         try {
-            val `is` = context.assets.open("Movies")
-            val size = `is`.available()
+            val inputStream = context.assets.open("Movies")
+            val size = inputStream.available()
             val buffer = ByteArray(size)
-            `is`.read(buffer)
-            `is`.close()
+            inputStream.read(buffer)
+            inputStream.close()
             json = String(buffer)
         } catch (ex: IOException) {
             ex.printStackTrace()
@@ -75,14 +77,14 @@ class MovieViewModel : ViewModel() {
     }
 
     fun onSelect(position: Int) {
-        var localMovies = currentViewState().movies
+        val localMovies = currentViewState().movies
         localMovies[position].selection = !localMovies[position].selection
         viewState.value =
                 currentViewState().copy(movies = localMovies, showMessage = false, showDialog = false)
     }
 
     fun onClearAll() {
-        var localMovies = currentViewState().movies
+        val localMovies = currentViewState().movies
         for (movie in localMovies) {
             if (movie.selection) {
                 movie.selection = !movie.selection
@@ -93,7 +95,7 @@ class MovieViewModel : ViewModel() {
     }
 
     fun onSelectAll() {
-        var localMovies = ArrayList<Movie>()
+        val localMovies = ArrayList<Movie>()
         for (movie in currentViewState().movies) {
             if (!movie.selection) {
                 movie.selection = !movie.selection
@@ -120,7 +122,8 @@ class MovieViewModel : ViewModel() {
     }
 
     fun onDelete() {
-        val localMovies = currentViewState().movies
+        val localMovies: MutableList<Movie> = mutableListOf()
+        localMovies.addAll(currentViewState().movies)
         val deleteMovie = ArrayList<Movie>()
         for (movie in localMovies) {
             if (movie.selection) {
@@ -133,10 +136,11 @@ class MovieViewModel : ViewModel() {
     }
 
     fun onLongClick(position: Int) {
-        val localMovies = currentViewState().movies
+        val localMovies = mutableListOf<Movie>()
+        localMovies.addAll(currentViewState().movies)
         val localMovie = localMovies[position]
 
-        localMovies.add(position + 1, localMovie.copy())
+        localMovies.add(position + 1, localMovie.copy(id = Random().nextInt(10000)))
         viewState.value =
                 currentViewState().copy(movies = localMovies, showMessage = false, showDialog = false)
     }

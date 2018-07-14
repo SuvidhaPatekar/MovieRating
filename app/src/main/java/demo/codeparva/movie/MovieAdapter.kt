@@ -1,39 +1,28 @@
 package demo.codeparva.movie
 
-import android.content.Context
+import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.ImageView
+import android.widget.TextView
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_movie.view.*
-import kotlinx.android.synthetic.main.item_movie_rating.view.*
 
 
-class MovieAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MovieAdapter : ListAdapter<Movie, MovieAdapter.MovieRatingViewHolder>(MovieDiffIUtil()) {
 
-    private var movies: ArrayList<Movie>? = null
     private lateinit var onClickListener: OnClickListener
     private val VIEW_TYPE_MOVIE = 0
     private val VIEW_TYPE_MOVIE_RATING = 1
-    private lateinit var context: Context
 
-    fun setOnClickListener(
-            onClickListener: OnClickListener,
-            context: Context
-    ) {
+    fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener
-        this.context = context
-    }
-
-    fun setMovies(movies: ArrayList<Movie>?) {
-        this.movies = movies
-        notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (movies!![position].rating >= 8) {
+        return if (getItem(position).rating >= 8) {
             VIEW_TYPE_MOVIE_RATING
         } else {
             VIEW_TYPE_MOVIE
@@ -43,96 +32,59 @@ class MovieAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
-    ): ViewHolder {
+    ): MovieRatingViewHolder {
 
-        when (viewType) {
-            VIEW_TYPE_MOVIE_RATING -> return MovieViewHolder(
+        val viewholder = when (viewType) {
+            VIEW_TYPE_MOVIE_RATING -> MovieRatingViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.item_movie_rating, parent, false)
             )
 
-            VIEW_TYPE_MOVIE -> return MovieViewHolder(
+            VIEW_TYPE_MOVIE -> MovieRatingViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
             )
 
-            else -> return MovieViewHolder(
+            else -> MovieRatingViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
             )
         }
-    }
 
-    override fun getItemCount(): Int {
-        return if (movies != null)
-            movies!!.size
-        else
-            0
-    }
-
-    override fun onBindViewHolder(
-            holder: ViewHolder,
-            position: Int
-    ) {
-        when (holder.itemViewType) {
-            VIEW_TYPE_MOVIE_RATING -> (MovieRatingViewHolder(itemView = holder.itemView)).bindTo(
-                    movies?.get(position), position
-            )
-
-            VIEW_TYPE_MOVIE -> (MovieViewHolder(itemView = holder.itemView)).bindTo(
-                    movies?.get(position), position
-            )
+        viewholder.checkboxRating.setOnClickListener {
+            if (viewholder.adapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
+            onClickListener.onSelect(viewholder.adapterPosition)
         }
-    }
 
-    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindTo(
-                movie: Movie?,
-                position: Int
-        ) {
-            if (null != movie) {
-                itemView.tvDescription.text = movie.description
-                itemView.tvTitle.text = movie.name
-                itemView.tvRating.text = movie.rating.toString()
-                Picasso.with(context).isLoggingEnabled = true
-
-                Picasso.with(context)
-                        .load(movie.url)
-                        .into(itemView.ivBanner)
-                itemView.checkbox.isChecked = movie.selection
-
-                itemView.checkbox.setOnClickListener {
-                    onClickListener.onSelect(position)
-                }
-
-                itemView.setOnLongClickListener { view ->
-                    onClickListener.onLongClick(position)
-                    true
-                }
+        viewholder.itemView.setOnLongClickListener {
+            if (viewholder.adapterPosition == RecyclerView.NO_POSITION) true
+            else {
+                onClickListener.onLongClick(viewholder.adapterPosition)
+                true
             }
         }
+        return viewholder
     }
 
-    inner class MovieRatingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindTo(
-                movie: Movie?,
-                position: Int
-        ) {
-            if (null != movie) {
-                itemView.tvDescriptionRating.text = movie.description
-                itemView.tvTitleRating.text = movie.name
-                itemView.checkboxRating.isChecked = movie.selection
-                itemView.tvMovieRating.text = movie.rating.toString()
-                val picasso = Picasso.Builder(context).listener { picasso, uri, exception -> exception.printStackTrace() }.build()
-                picasso.isLoggingEnabled = true
-                picasso.load(movie.url)
-                        .into(itemView.ivBannerRating)
-                itemView.checkboxRating.setOnClickListener {
-                    onClickListener.onSelect(position)
-                }
 
-                itemView.setOnLongClickListener { view ->
-                    onClickListener.onLongClick(position)
-                    true
-                }
-            }
+    override fun onBindViewHolder(holder: MovieRatingViewHolder, position: Int) {
+        MovieRatingViewHolder(holder.itemView).bindTo(
+                getItem(position))
+    }
+
+    inner class MovieRatingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val tvDescriptionRating: TextView = itemView.findViewById(R.id.tvDescription)
+        private val tvTitleRating: TextView = itemView.findViewById(R.id.tvTitle)
+        val checkboxRating: CheckBox = itemView.findViewById(R.id.checkbox)
+        private val tvMovieRating: TextView = itemView.findViewById(R.id.tvRating)
+        private val ivBannerRating: ImageView = itemView.findViewById(R.id.ivBanner)
+
+
+        fun bindTo(movie: Movie) {
+            tvDescriptionRating.text = movie.description
+            tvTitleRating.text = movie.name
+            checkboxRating.isChecked = movie.selection
+            tvMovieRating.text = movie.rating.toString()
+            Picasso.get().load(movie.url)
+                    .fit()
+                    .into(ivBannerRating)
         }
     }
 
