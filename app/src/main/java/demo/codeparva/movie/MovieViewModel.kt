@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.util.Log
+import copyList
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -77,30 +78,28 @@ class MovieViewModel : ViewModel() {
     }
 
     fun onSelect(position: Int) {
-        val localMovies = currentViewState().movies
+        val localMovies = copyList(currentViewState().movies)
         localMovies[position].selection = !localMovies[position].selection
         viewState.value =
                 currentViewState().copy(movies = localMovies, showMessage = false, showDialog = false)
     }
 
     fun onClearAll() {
-        val localMovies = currentViewState().movies
+        val localMovies = copyList(currentViewState().movies)
         for (movie in localMovies) {
-            if (movie.selection) {
-                movie.selection = !movie.selection
-            }
+            if (movie.selection)
+                movie.selection = false
         }
         viewState.value =
                 currentViewState().copy(movies = localMovies, showDialog = false, showMessage = false)
     }
 
     fun onSelectAll() {
-        val localMovies = ArrayList<Movie>()
-        for (movie in currentViewState().movies) {
-            if (!movie.selection) {
-                movie.selection = !movie.selection
-            }
-            localMovies.add(movie)
+        val localMovies = copyList(currentViewState().movies)
+
+        for (movie in localMovies) {
+            if (!movie.selection)
+                movie.selection = true
         }
         viewState.value =
                 currentViewState().copy(movies = localMovies, showMessage = false, showDialog = false)
@@ -112,6 +111,7 @@ class MovieViewModel : ViewModel() {
         for (movie in currentViewState().movies) {
             if (movie.selection) {
                 isShowDialog = true
+                isShowMessage = false
                 break
             } else {
                 isShowMessage = true
@@ -122,8 +122,7 @@ class MovieViewModel : ViewModel() {
     }
 
     fun onDelete() {
-        val localMovies: MutableList<Movie> = mutableListOf()
-        localMovies.addAll(currentViewState().movies)
+        val localMovies = copyList(currentViewState().movies)
         val deleteMovie = ArrayList<Movie>()
         for (movie in localMovies) {
             if (movie.selection) {
@@ -136,8 +135,8 @@ class MovieViewModel : ViewModel() {
     }
 
     fun onLongClick(position: Int) {
-        val localMovies = mutableListOf<Movie>()
-        localMovies.addAll(currentViewState().movies)
+        val localMovies = copyList(currentViewState().movies)
+
         val localMovie = localMovies[position]
 
         localMovies.add(position + 1, localMovie.copy(id = Random().nextInt(10000)))

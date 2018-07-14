@@ -6,7 +6,7 @@ data class Movie(
         val id: Int = Random().nextInt(10000),
         val description: String,
         val stars: String,
-        val name: String,
+        var name: String,
         val length: String?,
         val image: String,
         val year: String?,

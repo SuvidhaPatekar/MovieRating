@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnClickListener {
         movieAdapter.setOnClickListener(this)
 
         rvMovies.adapter = movieAdapter
-//        rvMovies.isNestedScrollingEnabled = false
+        rvMovies.isNestedScrollingEnabled = false
         rvMovies.itemAnimator = DefaultItemAnimator()
 
         btnClearAll.setOnClickListener {
@@ -76,6 +76,8 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnClickListener {
             if (null != it && it.movies.isNotEmpty()) {
                 movieList = it.movies
                 movieAdapter.submitList(it.movies)
+                //additional notifyset change when skipping animation
+                movieAdapter.notifyDataSetChanged()
                 rvMovies.visibility = View.VISIBLE
                 btnClearAll.visibility = View.VISIBLE
                 btnSelectAll.visibility = View.VISIBLE
@@ -98,9 +100,8 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnClickListener {
                 Snackbar.make(
                         btnDelete,
                         getString(R.string.select_movie),
-                        Snackbar.LENGTH_LONG //
-                )
-                        .show()
+                        Snackbar.LENGTH_LONG
+                ).show()
             }
         })
     }

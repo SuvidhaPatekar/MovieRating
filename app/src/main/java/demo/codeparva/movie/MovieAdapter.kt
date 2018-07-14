@@ -16,6 +16,7 @@ class MovieAdapter : ListAdapter<Movie, MovieAdapter.MovieRatingViewHolder>(Movi
     private lateinit var onClickListener: OnClickListener
     private val VIEW_TYPE_MOVIE = 0
     private val VIEW_TYPE_MOVIE_RATING = 1
+    private val picasso = Picasso.get()
 
     fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener
@@ -82,7 +83,7 @@ class MovieAdapter : ListAdapter<Movie, MovieAdapter.MovieRatingViewHolder>(Movi
             tvTitleRating.text = movie.name
             checkboxRating.isChecked = movie.selection
             tvMovieRating.text = movie.rating.toString()
-            Picasso.get().load(movie.url)
+            picasso.load(movie.url)
                     .fit()
                     .into(ivBannerRating)
         }
