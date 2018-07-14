@@ -9,4 +9,7 @@
     <string name="select_all">Select All</string>
     <string name="clear_all">Clear All</string>
     <string name="refresh">REFRESH</string>
+    <string name="select_movie">Please select atleast one movie.</string>
+    <string name="delete_movie">Delete Movie</string>
+    <string name="delete_confirmation_msg">Are you sure you want to delete these movies?</string>
 </resources>
