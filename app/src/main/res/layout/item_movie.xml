@@ -5,78 +5,74 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardElevation="5dp"
-    >
+    app:cardElevation="5dp">
 
-  <android.support.constraint.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      >
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/ivBanner"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:contentDescription="@string/show_image"
-        android:src="@drawable/ic_launcher_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        <ImageView
+            android:id="@+id/ivBanner"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_margin="8dp"
+            android:contentDescription="@string/show_image"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintBottom_toTopOf="@id/tvRating"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvRating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/ic_favorite_border_black_24dp"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        app:layout_constraintLeft_toLeftOf="@id/ivBanner"
-        app:layout_constraintRight_toRightOf="@id/ivBanner"
-        app:layout_constraintTop_toBottomOf="@id/ivBanner"
-        />
+        <TextView
+            android:id="@+id/tvRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:drawablePadding="6dp"
+            android:drawableEnd="@drawable/ic_favorite_border_black_24dp"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/ivBanner"
+            app:layout_constraintRight_toRightOf="@id/ivBanner"
+            app:layout_constraintTop_toBottomOf="@id/ivBanner" />
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:paddingEnd="40dp"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        app:layout_constraintLeft_toRightOf="@id/ivBanner"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="fygjukhihgjhv dfguhkbdc gukcjn, "
-        />
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingEnd="40dp"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toRightOf="@id/ivBanner"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="fygjukhihgjhv dfguhkbdc gukcjn, " />
 
-    <TextView
-        android:id="@+id/tvDescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:paddingEnd="64dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/ivBanner"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        android:maxLines="3"
-        android:ellipsize="end"
-        tools:text="fygjukhihgjhv dfguhkbdc gukcjn asfguef asfuwidef"
-        />
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:paddingEnd="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/ivBanner"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:text="fygjukhihgjhv dfguhkbdc gukcjn asfguef asfuwidef" />
 
 
-    <CheckBox
-        android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-  </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

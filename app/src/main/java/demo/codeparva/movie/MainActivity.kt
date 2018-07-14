@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity(), MovieAdapter.OnClickListener {
         movieAdapter.setOnClickListener(this)
 
         rvMovies.adapter = movieAdapter
+        rvMovies.setHasFixedSize(true)
         rvMovies.isNestedScrollingEnabled = false
         rvMovies.itemAnimator = DefaultItemAnimator()
 

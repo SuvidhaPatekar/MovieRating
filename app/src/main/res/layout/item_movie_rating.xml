@@ -50,12 +50,12 @@
 
         <ImageView
             android:id="@+id/ivBanner"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_margin="8dp"
             android:contentDescription="@string/show_image"
             android:src="@drawable/ic_launcher_background"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvRating"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,10 +63,13 @@
             android:id="@+id/tvRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
             android:drawableEnd="@drawable/ic_favorite_black_24dp"
+            android:drawablePadding="6dp"
             android:gravity="center"
             android:textColor="#000000"
             android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/ivBanner"
             app:layout_constraintRight_toRightOf="@id/ivBanner"
             app:layout_constraintTop_toBottomOf="@id/ivBanner" />
